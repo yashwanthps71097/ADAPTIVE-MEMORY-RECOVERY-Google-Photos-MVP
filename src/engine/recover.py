@@ -95,7 +95,8 @@ class RecoverEngine:
         Generates Tier-1 clarifying question isolating setting/venue variance.
         Produces: "Was it a restaurant, beach café, or hotel?"
         """
-        cache_key = f"tier1_{re.sub(r'[^\w\s]', '', query).strip().lower()}"
+        norm_query = re.sub(r'[^\w\s]', '', query).strip().lower()
+        cache_key = f"tier1_{norm_query}"
         if cache_key in self._cache:
             return self._cache[cache_key].model_copy(deep=True)
 
@@ -151,7 +152,8 @@ class RecoverEngine:
         """
         Generates Tier-2 associative recognition matrix under "Which feels familiar?".
         """
-        cache_key = f"tier2_{re.sub(r'[^\w\s]', '', query).strip().lower()}"
+        norm_query = re.sub(r'[^\w\s]', '', query).strip().lower()
+        cache_key = f"tier2_{norm_query}"
         if cache_key in self._cache:
             return self._cache[cache_key].model_copy(deep=True)
 
