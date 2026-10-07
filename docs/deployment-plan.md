@@ -142,15 +142,15 @@ Create a `vercel.json` file in the root directory. Replace `https://YOUR-RAILWAY
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://YOUR-RAILWAY-DOMAIN.up.railway.app/api/:path*"
+      "destination": "https://adaptive-memory-recovery-google-photos-mvp-production.up.railway.app/api/:path*"
     },
     {
       "source": "/photos/:path*",
-      "destination": "https://YOUR-RAILWAY-DOMAIN.up.railway.app/photos/:path*"
+      "destination": "https://adaptive-memory-recovery-google-photos-mvp-production.up.railway.app/photos/:path*"
     },
     {
       "source": "/thumbnails/:path*",
-      "destination": "https://YOUR-RAILWAY-DOMAIN.up.railway.app/thumbnails/:path*"
+      "destination": "https://adaptive-memory-recovery-google-photos-mvp-production.up.railway.app/thumbnails/:path*"
     },
     {
       "source": "/(.*)",
