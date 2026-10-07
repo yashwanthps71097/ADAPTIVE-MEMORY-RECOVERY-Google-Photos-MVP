@@ -32,7 +32,7 @@ logger = logging.getLogger("api")
 app = FastAPI(
     title="AI-Native Photo Retrieval MVP API",
     description="Cognitive memory-guided episodic photo retrieval engine powered by Groq LPU and hybrid vector search.",
-    version="0.2.0"
+    version="0.2.1"
 )
 
 # Enable CORS for local client development and remote Vercel frontend deployments
