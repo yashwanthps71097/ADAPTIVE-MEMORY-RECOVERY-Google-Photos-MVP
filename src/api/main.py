@@ -83,6 +83,20 @@ if THUMBNAILS_DIR.exists():
 if RAW_PHOTOS_DIR.exists():
     app.mount("/photos", StaticFiles(directory=str(RAW_PHOTOS_DIR)), name="photos")
 
+@app.get("/index.css", include_in_schema=False)
+async def get_css():
+    css_file = STATIC_DIR / "index.css"
+    if css_file.exists():
+        return FileResponse(str(css_file), media_type="text/css")
+    raise HTTPException(status_code=404, detail="index.css not found")
+
+@app.get("/app.js", include_in_schema=False)
+async def get_js():
+    js_file = STATIC_DIR / "app.js"
+    if js_file.exists():
+        return FileResponse(str(js_file), media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="app.js not found")
+
 @app.get("/", tags=["General"])
 async def root():
     index_file = STATIC_DIR / "index.html"
@@ -90,7 +104,7 @@ async def root():
         return FileResponse(str(index_file))
     return {
         "service": "AI-Native Photo Retrieval MVP API",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "status": "online",
         "docs_url": "/docs"
     }

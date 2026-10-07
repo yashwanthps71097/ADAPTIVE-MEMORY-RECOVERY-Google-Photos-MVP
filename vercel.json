@@ -16,6 +16,10 @@
       "destination": "https://adaptive-memory-recovery-google-photos-mvp-production.up.railway.app/thumbnails/:path*"
     },
     {
+      "source": "/static/:path*",
+      "destination": "/src/api/static/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/src/api/static/$1"
     }

@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/static/:path*",
+      "destination": "/:path*"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://adaptive-memory-recovery-google-photos-mvp-production.up.railway.app/api/:path*"
     },
