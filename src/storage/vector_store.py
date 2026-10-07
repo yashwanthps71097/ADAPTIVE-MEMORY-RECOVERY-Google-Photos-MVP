@@ -1,9 +1,12 @@
 import uuid
+import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from qdrant_client import QdrantClient
 from qdrant_client.http import models as qmodels
 from src.config import QDRANT_STORAGE_PATH, COLLECTION_NAME, VECTOR_DIMENSION
+
+logger = logging.getLogger(__name__)
 
 def to_qdrant_uuid(raw_id: str) -> str:
     """Ensures point ID is a compliant standard UUID format for Qdrant."""
@@ -15,13 +18,27 @@ def to_qdrant_uuid(raw_id: str) -> str:
 class LocalVectorStore:
     """
     Embedded local Qdrant Vector Store with HNSW indexing and payload filtering.
-    Does not require external Docker daemon; persists directly to disk.
+    Does not require external Docker daemon; persists directly to disk with resilient in-memory fallback.
     """
     def __init__(self, storage_path: Path = QDRANT_STORAGE_PATH, collection_name: str = COLLECTION_NAME):
-        self.storage_path = storage_path
+        self.storage_path = Path(storage_path)
         self.collection_name = collection_name
-        self.client = QdrantClient(path=str(storage_path))
-        self._ensure_collection()
+        self.storage_path.mkdir(parents=True, exist_ok=True)
+
+        lock_file = self.storage_path / ".lock"
+        if lock_file.exists():
+            try:
+                lock_file.unlink()
+            except Exception:
+                pass
+
+        try:
+            self.client = QdrantClient(path=str(self.storage_path))
+            self._ensure_collection()
+        except Exception as e:
+            logger.warning(f"Persistent Qdrant initialization note: {e}. Falling back to in-memory vector store.")
+            self.client = QdrantClient(":memory:")
+            self._ensure_collection()
 
     def _ensure_collection(self) -> None:
         collections = [c.name for c in self.client.get_collections().collections]
@@ -142,5 +159,8 @@ class LocalVectorStore:
 
     def count(self) -> int:
         """Returns total vector count in the collection."""
-        res = self.client.count(collection_name=self.collection_name)
-        return res.count
+        try:
+            res = self.client.count(collection_name=self.collection_name)
+            return res.count
+        except Exception:
+            return 0

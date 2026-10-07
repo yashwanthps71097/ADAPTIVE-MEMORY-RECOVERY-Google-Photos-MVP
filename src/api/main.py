@@ -117,6 +117,7 @@ async def api_info():
         ]
     }
 
+@app.get("/health", tags=["General"])
 @app.get("/api/health", tags=["General"])
 async def health_check():
     """Health status and collection metrics."""
