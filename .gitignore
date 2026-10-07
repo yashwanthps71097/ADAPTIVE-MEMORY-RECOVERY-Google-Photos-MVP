@@ -1,0 +1,25 @@
+# Secrets & Local Environment
+.env
+*.env
+.env.local
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+
+# Node artifacts
+node_modules/
+dist/
+.next/
+
+# Ephemeral runtime & scratch files
+*.log
+*.lock
+.lock
+scratch/
+

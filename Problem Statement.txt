@@ -1,0 +1,113 @@
+## Problem Statement
+
+Users often remember a specific old photo but cannot recall the precise details needed to retrieve it, such as the exact date, location, album, or searchable keywords.
+
+When their initial search produces weak or irrelevant results, they often do not know **what clue to try next** and resort to repeatedly guessing different queries or give up.
+
+The MVP should solve this specific problem:
+
+> **How might we help users recover a remembered-but-poorly-described photo by turning incomplete memories into actionable retrieval cues and guiding them to a new retrieval path when the initial search fails?**
+
+### Core User Scenario
+
+A user says:
+
+> “I’m looking for that small café we went to during our Goa trip with my friend.”
+
+They may remember:
+
+* Goa
+* Friend
+* Café
+* Trip
+
+But may not remember:
+
+* Café name
+* Exact date
+* Exact location
+* Album
+* Searchable keywords
+
+### MVP Goal
+
+Build an AI-native retrieval experience with progressive multi-stage recovery:
+
+```
+        INCOMPLETE MEMORY
+   “That café in Goa with my friend”
+                 ↓
+          UNDERSTAND MEMORY
+     Extract contextual cues
+   People • Place • Event • Activity
+                 ↓
+          INITIAL SEARCH
+                 ↓
+        EVALUATE RESULTS
+          ┌────────┴────────┐
+       Relevant             Weak
+          ↓                   ↓
+    PHOTO FOUND       ASK FOR MEANINGFUL
+                         DETAILS
+                              ↓
+                 “Was it a restaurant,
+                  beach café, or hotel?”
+                              ↓
+                   UPDATE SEARCH CUES
+                              ↓
+                       SEARCH AGAIN
+                              ↓
+                    ┌─────────┴─────────┐
+                 Relevant              Still Weak
+                    ↓                      ↓
+              PHOTO FOUND          RECOGNITION /
+                                      SUGGESTION
+                                           ↓
+                              “Which feels familiar?”
+                                           ↓
+                         Restaurant • Beach • Travel
+                         Friends • Evening • Celebration
+                                           ↓
+                                  USER RECOGNIZES CUE
+                                           ↓
+                              UPDATE RETRIEVAL PATH
+                                           ↓
+                                    SEARCH AGAIN
+                                           ↓
+                                     PHOTO FOUND
+```
+
+### Core AI Intelligence
+
+The MVP should demonstrate three AI capabilities:
+
+**1. Understand**
+Convert a vague natural-language memory into meaningful memory cues across core dimensions (People, Place, Event, Activity).
+
+**2. Connect**
+Use those cues to identify relevant photos and possible retrieval paths via multi-modal hybrid search.
+
+**3. Recover (Progressive 2-Tier Disambiguation)**
+When search confidence is insufficient, actively guide the user across a structured recovery ladder instead of asking them to guess new queries:
+* **Tier 1 (First Weak Result) — Ask for Meaningful Details:** Formulate targeted clarifying questions to narrow down the setting or entity (*“Was it a restaurant, beach café, or hotel?”*).
+* **Tier 2 (If Still Weak) — Recognition / Suggestion:** Surface recognizable associative cue anchors (*“Which feels familiar?”* across *Restaurant • Beach • Travel • Friends • Evening • Celebration*) to trigger episodic recognition.
+
+### AI Engine & Inference Platform
+Cognitive reasoning (understanding episodic cues and generating recovery pivots) is powered by **Groq API** (`GROQ_API_KEY`), utilizing ultra-fast LPU inference (e.g., Llama 3.3 / Llama 3.1) to ensure real-time, sub-second conversational latency.
+
+### Key Product Principle
+
+> **Don't make users remember more. Help them discover what they already partially remember.**
+
+### MVP Success Criteria
+
+A user should be able to complete a real retrieval task and successfully find the target photo, even when their initial description is incomplete.
+
+Measure:
+
+* Retrieval success rate
+* Time to retrieve
+* Number of search attempts
+* Number of recovery/pivot interactions
+* % of users who recognize a suggested cue
+* User-reported retrieval effort

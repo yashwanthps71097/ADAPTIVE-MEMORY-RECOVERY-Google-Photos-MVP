@@ -1,0 +1,55 @@
+{
+  "timestamp": 1791178884.2777476,
+  "traditional_success_rate": 20.0,
+  "ai_success_rate": 100.0,
+  "avg_initial_latency_ms": 314.6,
+  "avg_pivot_latency_ms": 150.1,
+  "avg_thumbnail_kb": 2.3,
+  "scenarios": [
+    {
+      "scenario": "Caf\u00e9 in Goa with Friend (Primary)",
+      "expected": "IMG_GOA_CAFE_4021.jpg",
+      "traditional_top5": false,
+      "ai_top1": true,
+      "initial_latency_ms": 671.8,
+      "pivot_latency_ms": 79.5,
+      "top1_score": 0.7705
+    },
+    {
+      "scenario": "Outdoor Rainy Street Food Market",
+      "expected": "IMG_MUMBAI_RAIN_2104.jpg",
+      "traditional_top5": false,
+      "ai_top1": true,
+      "initial_latency_ms": 75.4,
+      "pivot_latency_ms": 81.3,
+      "top1_score": 0.9591
+    },
+    {
+      "scenario": "Group Birthday Dinner Celebration",
+      "expected": "IMG_BDAY_PARTY_8812.jpg",
+      "traditional_top5": false,
+      "ai_top1": true,
+      "initial_latency_ms": 74.7,
+      "pivot_latency_ms": 83.4,
+      "top1_score": 0.9288
+    },
+    {
+      "scenario": "Mountain Sunrise Hike",
+      "expected": "IMG_MANALI_HIKE_1045.jpg",
+      "traditional_top5": true,
+      "ai_top1": true,
+      "initial_latency_ms": 72.3,
+      "pivot_latency_ms": 416.4,
+      "top1_score": 0.9594
+    },
+    {
+      "scenario": "Dog Playing at Beach Resort",
+      "expected": "IMG_PALOLEM_DOG_5541.jpg",
+      "traditional_top5": false,
+      "ai_top1": true,
+      "initial_latency_ms": 678.9,
+      "pivot_latency_ms": 89.9,
+      "top1_score": 0.8762
+    }
+  ]
+}
