@@ -1,5 +1,0 @@
-[tools]
-python = { version = "3.11", github_attestations = false }
-
-[settings]
-python.github_attestations = false
