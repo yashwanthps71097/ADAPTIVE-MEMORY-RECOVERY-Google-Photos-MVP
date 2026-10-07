@@ -2,7 +2,7 @@ import os
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -64,6 +64,18 @@ async def startup_event():
             logger.error(f"Failed to auto-ingest photo dataset: {ex}")
 
 @app.middleware("http")
+async def handle_head_requests(request: Request, call_next):
+    """Gracefully handle HTTP HEAD requests sent by uptime monitoring tools like UptimeRobot."""
+    if request.method == "HEAD":
+        request.scope["method"] = "GET"
+        response = await call_next(request)
+        return Response(
+            status_code=response.status_code,
+            headers=dict(response.headers)
+        )
+    return await call_next(request)
+
+@app.middleware("http")
 async def add_no_cache_headers(request, call_next):
     response = await call_next(request)
     path = request.url.path
@@ -83,37 +95,37 @@ if THUMBNAILS_DIR.exists():
 if RAW_PHOTOS_DIR.exists():
     app.mount("/photos", StaticFiles(directory=str(RAW_PHOTOS_DIR)), name="photos")
 
-@app.get("/index.css", include_in_schema=False)
+@app.api_route("/index.css", methods=["GET", "HEAD"], include_in_schema=False)
 async def get_css():
     css_file = STATIC_DIR / "index.css"
     if css_file.exists():
         return FileResponse(str(css_file), media_type="text/css")
     raise HTTPException(status_code=404, detail="index.css not found")
 
-@app.get("/app.js", include_in_schema=False)
+@app.api_route("/app.js", methods=["GET", "HEAD"], include_in_schema=False)
 async def get_js():
     js_file = STATIC_DIR / "app.js"
     if js_file.exists():
         return FileResponse(str(js_file), media_type="application/javascript")
     raise HTTPException(status_code=404, detail="app.js not found")
 
-@app.get("/", tags=["General"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["General"])
 async def root():
     index_file = STATIC_DIR / "index.html"
     if index_file.exists():
         return FileResponse(str(index_file))
     return {
         "service": "AI-Native Photo Retrieval MVP API",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "status": "online",
         "docs_url": "/docs"
     }
 
-@app.get("/api", tags=["General"])
+@app.api_route("/api", methods=["GET", "HEAD"], tags=["General"])
 async def api_info():
     return {
         "service": "AI-Native Photo Retrieval MVP API",
-        "version": "0.2.0",
+        "version": "0.2.2",
         "status": "online",
         "docs_url": "/docs",
         "endpoints": [
@@ -131,8 +143,8 @@ async def api_info():
         ]
     }
 
-@app.get("/health", tags=["General"])
-@app.get("/api/health", tags=["General"])
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["General"])
+@app.api_route("/api/health", methods=["GET", "HEAD"], tags=["General"])
 async def health_check():
     """Health status and collection metrics."""
     try:
